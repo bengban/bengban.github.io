@@ -46,8 +46,10 @@ public var hyb_bottomOffsetToCell: CGFloat? {
     	.OBJC_ASSOCIATION_ASSIGN);
   }
 }
-	
+```
+
 3. 自动计算行高-带缓存功能
+
 ```swift
 /**
  带缓存功能、自动计算行高

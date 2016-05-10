@@ -16,7 +16,7 @@ tags: Swift
 ## 实现思路
 
 ## DEMO链接
-[CoderJackyHuang/HYBSnapkitAutoCellHeight](https://github.com/CoderJackyHuang/HYBSnapkitAutoCellHeight.git)
+* [CoderJackyHuang/HYBSnapkitAutoCellHeight](https://github.com/CoderJackyHuang/HYBSnapkitAutoCellHeight.git)
 ## 参考链接
 * HYBSnapkitAutoCellHeight开发：[开源HYBSnapkitAutoCellHeight自动算行高](http://www.henishuo.com/snapkit-auto-cell-height/)
 * UIView的layoutIfNeeded解释：[UIView的setNeedsLayout, layoutIfNeeded 和 layoutSubviews 方法之间的关系解释](http://blog.csdn.net/meegomeego/article/details/39890385)

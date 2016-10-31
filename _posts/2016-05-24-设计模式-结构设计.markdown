@@ -1,0 +1,386 @@
+---
+layout: post
+title: 设计模式-结构设计
+date: 2016-10-31
+tags: 设计模式
+---
+
+结构设计
+
+1.适配器模式（Adapter）
+
+* 将一类的接口转换成客户希望的另外一个接口，Adapter模式使得原本由于接口不兼容而不能一起工作那些类可以一起工作。
+
+  ``` swift
+    protocol OlderDeathStarSuperLaserAiming {
+	    var angleV: NSNumber {get}
+	    var angleH: NSNumber {get}
+	}
+
+	/*:
+	**Adaptee**
+	*/
+	struct DeathStarSuperlaserTarget {
+	    let angleHorizontal: Double
+	    let angleVertical: Double
+
+	    init(angleHorizontal:Double, angleVertical:Double) {
+	        self.angleHorizontal = angleHorizontal
+	        self.angleVertical = angleVertical
+	    }
+	}
+
+	/*:
+	**Adapter**
+	*/
+	struct OldDeathStarSuperlaserTarget : OlderDeathStarSuperLaserAiming {
+	    private let target : DeathStarSuperlaserTarget
+
+	    var angleV:NSNumber {
+	        return NSNumber(double: target.angleVertical)
+	    }
+
+	    var angleH:NSNumber {
+	        return NSNumber(double: target.angleHorizontal)
+	    }
+
+	    init(_ target:DeathStarSuperlaserTarget) {
+	        self.target = target
+	    }
+	}
+
+	let target = DeathStarSuperlaserTarget(angleHorizontal: 14.0, angleVertical: 12.0)
+	let oldFormat = OldDeathStarSuperlaserTarget(target)
+
+	oldFormat.angleH
+	oldFormat.angleV
+  ```
+
+2.桥模模式（Bridge）
+
+* 将抽象部分与它的实现部分相分离，使他们可以独立的变化。
+
+  ``` swift
+	protocol Switch {
+	    var appliance: Appliance {get set}
+	    func turnOn()
+	}
+
+	protocol Appliance {
+	    func run()
+	}
+
+	class RemoteControl: Switch {
+	    var appliance: Appliance
+
+	    func turnOn() {
+	        self.appliance.run()
+	    }
+	    
+	    init(appliance: Appliance) {
+	        self.appliance = appliance
+	    }
+	}
+
+	class TV: Appliance {
+	    func run() {
+	        print("tv turned on");
+	    }
+	}
+
+	class VacuumCleaner: Appliance {
+	    func run() {
+	        print("vacuum cleaner turned on")
+	    }
+	}
+
+	/*:
+	### Usage
+	*/
+	var tvRemoteControl = RemoteControl(appliance: TV())
+	tvRemoteControl.turnOn()
+
+	var fancyVacuumCleanerRemoteControl = RemoteControl(appliance: VacuumCleaner())
+	fancyVacuumCleanerRemoteControl.turnOn()
+  ```
+
+3.组合模式（Composite）
+
+* 将对象组合成树形结构以表示部分整体的关系，Composite使得用户对单个对象和组合对象的使用具有一致性。
+
+  ``` swift
+	protocol PropertyObserver : class {
+	    func willChangePropertyName(propertyName:String, newPropertyValue:AnyObject?)
+	    func didChangePropertyName(propertyName:String, oldPropertyValue:AnyObject?)
+	}
+
+	class TestChambers {
+
+	    weak var observer:PropertyObserver?
+
+	    var testChamberNumber: Int = 0 {
+	        willSet(newValue) {
+	            observer?.willChangePropertyName("testChamberNumber", newPropertyValue:newValue)
+	        }
+	        didSet {
+	            observer?.didChangePropertyName("testChamberNumber", oldPropertyValue:oldValue)
+	        }
+	    }
+	}
+
+	class Observer : PropertyObserver {
+	    func willChangePropertyName(propertyName: String, newPropertyValue: AnyObject?) {
+	        if newPropertyValue as? Int == 1 {
+	            print("Okay. Look. We both said a lot of things that you're going to regret.")
+	        }
+	    }
+
+	    func didChangePropertyName(propertyName: String, oldPropertyValue: AnyObject?) {
+	        if oldPropertyValue as? Int == 0 {
+	            print("Sorry about the mess. I've really let the place go since you killed me.")
+	        }
+	    }
+	}
+	
+	/*:
+	### Usage
+	*/
+	var observerInstance = Observer()
+	var testChambers = TestChambers()
+	testChambers.observer = observerInstance
+	testChambers.testChamberNumber++
+	/*:
+	>**Further Examples:** [Design Patterns in Swift](https://github.com/kingreza/Swift-Observer)
+	*/
+  ```
+
+4.装饰模式（Decrator）
+
+* 动态地给一个对象增加一些额外的职责，就增加的功能来说，Decorator模式相比生成子类更加灵活。
+
+  ```swift
+	protocol Shape {
+	    func draw(fillColor: String)
+	}
+
+	/*: 
+	Leafs
+	*/ 
+	class Square : Shape {
+	    func draw(fillColor: String) {
+	        print("Drawing a Square with color \(fillColor)")
+	    }
+	}
+
+	class Circle : Shape {
+	    func draw(fillColor: String) {
+	        print("Drawing a circle with color \(fillColor)")
+	    }
+	}
+
+	/*:
+	Composite
+	*/
+	class Whiteboard : Shape {
+	    lazy var shapes = [Shape]()
+	    
+	    init(_ shapes:Shape...) {
+	        self.shapes = shapes
+	    }
+	    
+	    func draw(fillColor:String) {
+	        for shape in self.shapes {
+	            shape.draw(fillColor)
+	        }
+	    }
+	}
+
+	/*:
+	### Usage:
+	*/
+
+	var whiteboard = Whiteboard(Circle(), Square())
+	whiteboard.draw("Red")
+  ```
+
+5.外观模式（Facade）
+
+* 为子系统中的一组接口提供一致的界面，Facade提供了一高层接口，这个接口使得子系统更容易使用。
+
+  ```swift
+	protocol Coffee {
+	    func getCost() -> Double
+	    func getIngredients() -> String
+	}
+
+	class SimpleCoffee: Coffee {
+	    func getCost() -> Double {
+	        return 1.0
+	    }
+
+	    func getIngredients() -> String {
+	        return "Coffee"
+	    }
+	}
+
+	class CoffeeDecorator: Coffee {
+	    private let decoratedCoffee: Coffee
+	    private let ingredientSeparator: String = ", "
+
+	    required init(decoratedCoffee: Coffee) {
+	        self.decoratedCoffee = decoratedCoffee
+	    }
+
+	    func getCost() -> Double {
+	        return decoratedCoffee.getCost()
+	    }
+
+	    func getIngredients() -> String {
+	        return decoratedCoffee.getIngredients()
+	    }
+	}
+
+	class Milk: CoffeeDecorator {
+	    required init(decoratedCoffee: Coffee) {
+	        super.init(decoratedCoffee: decoratedCoffee)
+	    }
+
+	    override func getCost() -> Double {
+	        return super.getCost() + 0.5
+	    }
+
+	    override func getIngredients() -> String {
+	        return super.getIngredients() + ingredientSeparator + "Milk"
+	    }
+	}
+
+	class WhipCoffee: CoffeeDecorator {
+	    required init(decoratedCoffee: Coffee) {
+	        super.init(decoratedCoffee: decoratedCoffee)
+	    }
+
+	    override func getCost() -> Double {
+	        return super.getCost() + 0.7
+	    }
+
+	    override func getIngredients() -> String {
+	        return super.getIngredients() + ingredientSeparator + "Whip"
+	    }
+	}
+	/*:
+	### Usage:
+	*/
+	var someCoffee: Coffee = SimpleCoffee()
+	print("Cost : \(someCoffee.getCost()); Ingredients: \(someCoffee.getIngredients())")
+	someCoffee = Milk(decoratedCoffee: someCoffee)
+	print("Cost : \(someCoffee.getCost()); Ingredients: \(someCoffee.getIngredients())")
+	someCoffee = WhipCoffee(decoratedCoffee: someCoffee)
+	print("Cost : \(someCoffee.getCost()); Ingredients: \(someCoffee.getIngredients())")
+  ```
+
+6.代理模式（Proxy）
+
+* 为其他对象提供一种代理以控制对这个对象的访问。
+
+  ```swift
+	enum Eternal {
+
+	    static func setObject(value: AnyObject!, forKey defaultName: String!) {
+	        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+	        defaults.setObject(value, forKey:defaultName)
+	        defaults.synchronize()
+	    }
+
+	    static func objectForKey(defaultName: String!) -> AnyObject! {
+	        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+
+	        return defaults.objectForKey(defaultName)
+	    }
+
+	}
+	/*:
+	### Usage
+	*/
+	Eternal.setObject("Disconnect me. I’d rather be nothing", forKey:"Bishop")
+	Eternal.objectForKey("Bishop")
+  ```
+
+
+7.享元模式（Flyweight）
+
+* 通过共享以便有效的支持大量小颗粒对象。
+
+  ```swift
+	protocol DoorOperator {
+	    func openDoors(doors: String) -> String
+	}
+
+	class HAL9000 : DoorOperator {
+	    func openDoors(doors: String) -> String {
+	        return ("HAL9000: Affirmative, Dave. I read you. Opened \(doors).")
+	    }
+	}
+
+	class CurrentComputer : DoorOperator {
+	    private var computer: HAL9000!
+
+	    func authenticateWithPassword(pass: String) -> Bool {
+
+	        guard pass == "pass" else {
+	            return false;
+	        }
+
+	        computer = HAL9000()
+
+	        return true
+	    }
+
+	    func openDoors(doors: String) -> String {
+
+	        guard computer != nil else {
+	            return "Access Denied. I'm afraid I can't do that."
+	        }
+
+	        return computer.openDoors(doors)
+	    }
+	}
+
+	let computer = CurrentComputer()
+	let doors = "Pod Bay Doors"
+
+	computer.openDoors(doors)
+
+	computer.authenticateWithPassword("pass")
+	computer.openDoors(doors)
+  ```
+
+8.虚拟代理（Virtual Proxy）
+
+* The proxy pattern is used to provide a surrogate or placeholder object, which references an underlying object. Virtual proxy is used for loading object on demand.
+
+  ```swift
+	protocol HEVSuitMedicalAid {
+	    func administerMorphine() -> String
+	}
+
+	class HEVSuit : HEVSuitMedicalAid {
+	    func administerMorphine() -> String {
+	        return "Morphine aministered."
+	    }
+	}
+
+	class HEVSuitHumanInterface : HEVSuitMedicalAid {
+	    lazy private var physicalSuit: HEVSuit = HEVSuit()
+
+	    func administerMorphine() -> String {
+	        return physicalSuit.administerMorphine()
+	    }
+	}
+
+	/*:
+	### Usage
+	*/
+	let humanInterface = HEVSuitHumanInterface()
+	humanInterface.administerMorphine()
+  ```
+

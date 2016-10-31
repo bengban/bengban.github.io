@@ -260,7 +260,7 @@ tags: 设计模式
 5.访问者模式
 表示一个作用于某对象结构中的各元素的操作，它使你可以在不改变各元素类的前提下定义作用于这个元素的新操作
 
-	``` swift
+	```swift
 		protocol PlanetVisitor {
 			func visit(planet: PlanetAlderaan)
 			func visit(planet: PlanetCoruscant)
@@ -290,7 +290,7 @@ tags: 设计模式
 		}
 	```
 
-	``` swift
+	```swift
 		/*:
 		### Usage
 		*/

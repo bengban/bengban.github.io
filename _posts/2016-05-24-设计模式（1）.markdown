@@ -11,15 +11,7 @@ tags: 设计模式
 ---The chain of responsibility pattern is used to process varied requests, each of which may be dealt with by a different handler.
 
   ``` swift
-    public func setNeedsLayout()
-    
-    public func layoutIfNeeded()
-    
-    public func layoutSubviews()
-  ```
-
-	``` swift
-	class MoneyPile {
+    class MoneyPile {
 	    let value: Int
 	    var quantity: Int
 	    var nextPile: MoneyPile?
@@ -85,9 +77,7 @@ tags: 设计模式
 	        return "Can withdraw: \(self.startPile.canWithdraw(value))"
 	    }
 	}
-	```
-
-	``` swift
+	
 	/*:
 	### Usage
 	*/
@@ -103,7 +93,7 @@ tags: 设计模式
 	atm.canWithdraw(100) // Can withdraw - 1x100
 	atm.canWithdraw(165) // Cannot withdraw because ATM doesn't has bill with value of 5
 	atm.canWithdraw(30)  // Can withdraw - 1x20, 2x10
-	```
+  ```
 
 2.命令模式（Command）
 将一个请求封装为一个对象，从而使你可以用不同的请求对客户进行参数化，对请求排队和记录请求日志，以及支持可撤销的操作

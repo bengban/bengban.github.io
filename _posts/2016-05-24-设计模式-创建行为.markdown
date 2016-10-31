@@ -9,7 +9,7 @@ tags: 设计模式
 
   ``` swift
 	protocol Decimal {
-	func stringValue() -> String
+		func stringValue() -> String
 		// factory
 		static func make(string : String) -> Decimal
 	}

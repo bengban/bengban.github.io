@@ -8,7 +8,8 @@ tags: 设计模式
 行为设计
 
 1.职责链模式（Chain Of Responsibility）
----The chain of responsibility pattern is used to process varied requests, each of which may be dealt with by a different handler.
+
+* 为解除请求的发送者和接收者之间耦合，而使多个对象都有机会处理这个请求。将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它。
 
   ``` swift
     class MoneyPile {
@@ -96,7 +97,8 @@ tags: 设计模式
   ```
 
 2.命令模式（Command）
-将一个请求封装为一个对象，从而使你可以用不同的请求对客户进行参数化，对请求排队和记录请求日志，以及支持可撤销的操作
+
+* 将一个请求封装为一个对象，从而使你可以用不同的请求对客户进行参数化，对请求排队和记录请求日志，以及支持可撤销的操作。
 
   ``` swift
 	protocol DoorCommand {
@@ -156,7 +158,8 @@ tags: 设计模式
   ```
 
 3.观察者模式（Observer）
-定义对象间一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知自动更新
+
+* 定义对象间一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知自动更新
 
   ``` swift
 	protocol PropertyObserver : class {
@@ -205,7 +208,8 @@ tags: 设计模式
   ```
 
 4.策略模式（Strategy）
-定义一系列的算法，把他们一个个封装起来，并使他们可以互相替换，本模式使得算法可以独立于使用它们的客户
+
+* 定义一系列的算法，把他们一个个封装起来，并使他们可以互相替换，本模式使得算法可以独立于使用它们的客户。
 
   ```swift
 	protocol PrintStrategy {
@@ -251,7 +255,8 @@ tags: 设计模式
   ```
 
 5.访问者模式
-表示一个作用于某对象结构中的各元素的操作，它使你可以在不改变各元素类的前提下定义作用于这个元素的新操作
+
+* 表示一个作用于某对象结构中的各元素的操作，它使你可以在不改变各元素类的前提下定义作用于这个元素的新操作。
 
   ```swift
 	protocol PlanetVisitor {

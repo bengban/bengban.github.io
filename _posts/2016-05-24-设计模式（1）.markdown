@@ -10,6 +10,14 @@ tags: 设计模式
 1.职责链模式（Chain Of Responsibility）
 ---The chain of responsibility pattern is used to process varied requests, each of which may be dealt with by a different handler.
 
+  ``` swift
+    public func setNeedsLayout()
+    
+    public func layoutIfNeeded()
+    
+    public func layoutSubviews()
+  ```
+
 	``` swift
 	class MoneyPile {
 	    let value: Int
@@ -212,7 +220,7 @@ tags: 设计模式
 4.策略模式（Strategy）
 定义一系列的算法，把他们一个个封装起来，并使他们可以互相替换，本模式使得算法可以独立于使用它们的客户
 
-	``` swift
+	```swift
 	protocol PrintStrategy {
 	    func printString(string: String) -> String
 	}
@@ -244,7 +252,7 @@ tags: 设计模式
 
 	```
 
-	``` swift
+	```swift
 	/*:
 	### Usage
 	*/
@@ -257,6 +265,7 @@ tags: 设计模式
 	>**Further Examples:** [Design Patterns in Swift](https://github.com/kingreza/Swift-Strategy)
 	*/
 	```
+
 5.访问者模式
 表示一个作用于某对象结构中的各元素的操作，它使你可以在不改变各元素类的前提下定义作用于这个元素的新操作
 
